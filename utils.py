@@ -35,7 +35,7 @@ def aes_encrypt(text, sec_key=nonce):
     return ciphertext.decode('ascii')
 
 
-def send_request(text, base_url):
+def send_enc_request(text, base_url):
     sec_key = create_secret_key(8)
 
     tmp = aes_encrypt(text)
@@ -52,4 +52,14 @@ def send_request(text, base_url):
     response = requests.post(base_url, data, headers=headers)
     content = json.loads(response.content.decode('utf-8'))
 
+    return content
+
+
+def send_request(url, data, method='POST'):
+    if method == 'POST':
+        content = requests.post(url, data, headers=headers).content
+    elif method == 'GET':
+        content = requests.get(url, data, headers=headers).content
+    else:
+        content = None
     return content
